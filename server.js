@@ -88,7 +88,6 @@ async function main () {
             }
         }
 
-
         let access_token = "";
         try {
           const auth         = await axios(options1);
@@ -150,15 +149,29 @@ async function main () {
 /* +++++++++++++++++++++++ */
 /* +++ START MAIN LOOP +++ */
 /* +++++++++++++++++++++++ */
-
-setInterval(main, 1000);
+setupRefreshTokenTxt(() => {
+    setInterval(main, 1000);
+});
 
 /* +++++++++++++++++++++++ */
 /* +++ HELPER FUNCTION +++ */
 /* +++++++++++++++++++++++ */
 
 function millisToMinutesAndSeconds(millis) {
-  var minutes = Math.floor(millis / 60000);
-  var seconds = ((millis % 60000) / 1000).toFixed(0);
-  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
+
+function setupRefreshTokenTxt(next) {
+    fs.open('./token/refresh_token.txt', 'r', (err, fd) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                fs.writeFileSync('./token/refresh_token.txt', "");
+                return next();
+            }
+            throw err;
+        }
+        return next();
+    });
 }
