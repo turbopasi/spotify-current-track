@@ -5,7 +5,7 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 
-const buff = new Buffer(process.env.SPOTIFY_CLIENT_ID+':'+process.env.SPOTIFY_CLIENT_SECRET);
+const buff = Buffer.from(process.env.SPOTIFY_CLIENT_ID+':'+process.env.SPOTIFY_CLIENT_SECRET);
 const base64data = buff.toString('base64');
 
 app.listen(8888, () => {
@@ -52,11 +52,11 @@ app.get('/callback', function(req, res) {
             const refresh_token = r.data.refresh_token;
             fs.writeFileSync('./token/refresh_token.txt', refresh_token);
             return res.end('Success ! You can close this tab now !')
-        })  
+        })
         .catch(err => {
             console.log(err.message);
         });
-    
+
 });
 
 /* +++++++++++++++++ */
@@ -64,6 +64,7 @@ app.get('/callback', function(req, res) {
 /* +++++++++++++++++ */
 
 let isRequesting = false;
+let requestsMade = 0;
 async function main () {
 
     if (isRequesting) { return }
@@ -87,8 +88,15 @@ async function main () {
             }
         }
 
-        const auth = await axios(options1);
-        const access_token = auth.data.access_token;
+
+        let access_token = "";
+        try {
+          const auth         = await axios(options1);
+                access_token = auth.data.access_token;
+        } catch (e) {
+          console.error("refresh_token request error");
+          console.error(e.message);
+        }
 
         // REQUEST CURRENTLY PLAYING SONG DATA
         const options2 = {
@@ -99,17 +107,30 @@ async function main () {
             }
         }
 
-        const trackInformation = await axios(options2);
+        let trackInformation = {};
+        try {
+          trackInformation = await axios(options2);
+        } catch (e) {
+          console.error("currently-playing request error");
+          console.error(e.message);
+        }
+
         if (trackInformation.data) {
             // WRITE TRACK INFORMATIONS TO FILE
-            const artist = trackInformation.data.item.artists[0].name;
-            const song = trackInformation.data.item.name;
-            const album = trackInformation.data.item.album.name;
-            const text = `${song} by ${artist} (${album})`;
+            const artist        = trackInformation.data.item.artists[0].name;
+            const song          = trackInformation.data.item.name;
+            const album         = trackInformation.data.item.album.name;
+            const progress_ms   = trackInformation.data.progress_ms;
+            const duration_ms   = trackInformation.data.item.duration_ms;
+            const progress_time = millisToMinutesAndSeconds(progress_ms);
+            const duration_time = millisToMinutesAndSeconds(duration_ms);
+            const text          = `${progress_time} / ${duration_time} - ${song} by ${artist}`;
             fs.writeFileSync('./output/song.txt', text);
             console.clear();
             console.log('Currently playing:');
             console.log(text);
+            requestsMade++;
+            console.log("Requests Made:", requestsMade);
             isRequesting = false;
         } else {
             console.clear();
@@ -130,7 +151,7 @@ async function main () {
 /* +++ START MAIN LOOP +++ */
 /* +++++++++++++++++++++++ */
 
-setInterval(main, 3000);
+setInterval(main, 1000);
 
 // user-read-currently-playing
 // https://api.spotify.com/v1/me/player/currently-playing
@@ -138,4 +159,13 @@ setInterval(main, 3000);
 //    SPOTIFY_CLIENT_ID=d12a6ebd7a5940a09285a97241de5154
 //SPOTIFY_CLIENT_SECRET=71351f9ce9294c7383a98552b17d28c7
 // SPOTIFY_ENDPOINT=https://api.spotify.com/v1/me/player/currently-playing
-    
+
+/* +++++++++++++++++++++++ */
+/* +++ HELPER FUNCTION +++ */
+/* +++++++++++++++++++++++ */
+
+function millisToMinutesAndSeconds(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
