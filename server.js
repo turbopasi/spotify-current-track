@@ -153,13 +153,6 @@ async function main () {
 
 setInterval(main, 1000);
 
-// user-read-currently-playing
-// https://api.spotify.com/v1/me/player/currently-playing
-
-//    SPOTIFY_CLIENT_ID=d12a6ebd7a5940a09285a97241de5154
-//SPOTIFY_CLIENT_SECRET=71351f9ce9294c7383a98552b17d28c7
-// SPOTIFY_ENDPOINT=https://api.spotify.com/v1/me/player/currently-playing
-
 /* +++++++++++++++++++++++ */
 /* +++ HELPER FUNCTION +++ */
 /* +++++++++++++++++++++++ */
