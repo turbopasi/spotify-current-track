@@ -7,3 +7,6 @@ node_modules
 
 song.txt
 output/song.txt
+
+refresh_token.txt
+token/refresh_token.txt
