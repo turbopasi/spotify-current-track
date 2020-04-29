@@ -1,15 +1,17 @@
 # 🎧 Spotify : Current Track 
 
-**What does it do**
+![NodeJS and Spotify Logo](https://image.prntscr.com/image/FHtaiEkPTjalgfKIupVZWg.png)
+
+##### What does it do
 Automatically fetches "currently playing track" information from user's Spotify Account and writes it into a plain *.txt file. Also outputs it to console. 
 
-**How does it work**
+#####  How does it work
 It utilizes Spotify's [`Web API`](https://developer.spotify.com/documentation/web-api/) and specifically the endpoint for current track informations `https://api.spotify.com/v1/me/player/currently-playing`. The user's `refresh_token` is used to make continuous requests on behalf of the authorized user. After a one-time authorization process the `refresh_token` is kept locally ⚠️ so please use at your own risk ⚠️. 
 
-**Why did I create it**
+##### Why did I create it
 I started streaming on Twitch and wanted to include my "currently playing" information within the stream's overlays. I am using OBS, so including text from a local *.txt is very simple. 
 
-**What do you need**
+##### What do you need
 
  - NodeJS & NPM
  - _Please note: I used NodeJS 14.0.0 since I wanted to make use of the latest "[Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)" feature._
@@ -51,3 +53,7 @@ Then, check out a new branch with `git checkout -b my-branch-name`
 Create your code / documentation changes in this branch, and commit when done. Once done, `git push fork your-branch-name`
 
 Once this is finished pushing, you can go to your fork on GitHub. It should now ask you right away if you want to create a pull request. Clicking that button should set you up with a text field similar to when creating a new issue on GitHub. Fill it out and submit the pull request. Then, we can review it “Pull requests” in this original repository.
+
+
+
+
