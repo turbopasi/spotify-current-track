@@ -10,3 +10,5 @@ output/song.txt
 
 refresh_token.txt
 token/refresh_token.txt
+
+*.txt
