@@ -1,7 +1,9 @@
+node_modules/
 node_modules
+
 .env
 *.env
 *env
-output
+
 song.txt
 output/song.txt
