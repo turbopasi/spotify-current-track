@@ -14,7 +14,6 @@ I started streaming on Twitch and wanted to include my "currently playing" infor
 ##### What do you need
 
  - NodeJS & NPM
- - _Please note: I used NodeJS 14.0.0 since I wanted to make use of the latest "[Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)" feature._
  - CLIENT_ID & CLIENT_SECRET from the [Spotify Developer Console](https://developer.spotify.com/dashboard/login)
  
 # Setup
