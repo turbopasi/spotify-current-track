@@ -24,11 +24,14 @@ cd spotify-current-track
 npm install
 ```
 
-**Create `.env` file in project root directory and input CLIENT_ID & CLIENT_SECRET**
+**Create `.env` file in project root directory, input CLIENT_ID & CLIENT_SECRET and a few other variables**
 Should look like this:
 ```ini
 SPOTIFY_CLIENT_ID=xxxxx
 SPOTIFY_CLIENT_SECRET=xxxxx
+PORT="8888"
+HOST="http://localhost:8888"
+OUTPUT_FILE="C:/Path/To/Output/song.txt"
 ```
 
 **Start App**

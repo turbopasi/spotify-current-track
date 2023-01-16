@@ -2,14 +2,15 @@ require('dotenv').config();
 
 const axios = require('axios');
 const express = require('express');
+const path = require('path');
 const fs = require('fs');
 const app = express();
 
-const buff = Buffer.from(process.env.SPOTIFY_CLIENT_ID+':'+process.env.SPOTIFY_CLIENT_SECRET);
+const buff = Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET);
 const base64data = buff.toString('base64');
 
-app.listen(8888, () => {
-    console.log("App listening on http://localhost:8888")
+app.listen(process.env.PORT, () => {
+    console.log(`App listening on ${process.env.HOST}`)
 });
 
 /* ++++++++++++++++++++++++++ */
@@ -19,7 +20,7 @@ app.listen(8888, () => {
 app.get('/login', function(req, res) {
 
     const scopes = 'user-read-currently-playing';
-    const redirect_uri = 'http://localhost:8888/callback';
+    const redirect_uri = `${process.env.HOST}/callback`;
 
     res.redirect('https://accounts.spotify.com/authorize' +
       '?response_type=code' +
@@ -124,7 +125,7 @@ async function main () {
             const progress_time = millisToMinutesAndSeconds(progress_ms);
             const duration_time = millisToMinutesAndSeconds(duration_ms);
             const text          = `${progress_time} / ${duration_time} - ${song} by ${artist}`;
-            fs.writeFileSync('./output/song.txt', text);
+            fs.writeFileSync(path.resolve(`${process.env.OUTPUT_FILE}`), text);
             console.clear();
             console.log('Currently playing:');
             console.log(text);
@@ -150,7 +151,7 @@ async function main () {
 /* +++ START MAIN LOOP +++ */
 /* +++++++++++++++++++++++ */
 setupRefreshTokenTxt(() => {
-    setInterval(main, 1000);
+    setInterval(main, 1200);
 });
 
 /* +++++++++++++++++++++++ */
